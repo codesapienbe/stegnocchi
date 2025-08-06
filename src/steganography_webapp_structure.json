@@ -1,0 +1,124 @@
+{
+  "core_concept": {
+    "title": "JPEG EXIF Steganography Webapp",
+    "description": "A React TypeScript webapp that demonstrates hiding encrypted payloads in JPEG EXIF metadata",
+    "key_features": [
+      "Hide encrypted text/data in JPEG EXIF headers",
+      "Extract hidden data from JPEG images",
+      "Client-side encryption/decryption",
+      "Image upload and processing",
+      "Real-time preview and validation"
+    ]
+  },
+  "technology_stack": {
+    "frontend": {
+      "framework": "React 18",
+      "language": "TypeScript",
+      "styling": "Tailwind CSS / CSS Modules",
+      "build_tool": "Vite / Create React App"
+    },
+    "libraries": {
+      "exif_manipulation": {
+        "name": "piexifjs",
+        "version": "^1.0.6",
+        "purpose": "Read and write EXIF metadata",
+        "features": [
+          "Load EXIF data",
+          "Modify metadata",
+          "Insert into JPEG"
+        ]
+      },
+      "encryption": {
+        "name": "crypto-js",
+        "version": "^4.2.0",
+        "purpose": "AES encryption for payload security",
+        "algorithms": [
+          "AES-256-GCM",
+          "PBKDF2 for key derivation"
+        ]
+      },
+      "steganography": {
+        "name": "ts-steganography",
+        "version": "^1.0.0",
+        "purpose": "TypeScript steganography utilities",
+        "method": "LSB encoding in alpha channel"
+      },
+      "image_processing": {
+        "name": "jpeg-js",
+        "version": "^0.4.4",
+        "purpose": "JPEG decoding/encoding in browser"
+      }
+    }
+  },
+  "implementation_approach": {
+    "encoding_process": [
+      "1. User uploads JPEG image",
+      "2. Extract existing EXIF data using piexifjs",
+      "3. Encrypt payload using AES-256",
+      "4. Encode encrypted data in EXIF comment/description field",
+      "5. Generate new JPEG with modified EXIF",
+      "6. Provide download of steganographic image"
+    ],
+    "decoding_process": [
+      "1. User uploads steganographic JPEG",
+      "2. Extract EXIF metadata using piexifjs",
+      "3. Locate and extract hidden payload",
+      "4. Decrypt payload using user-provided key",
+      "5. Display decrypted message/data"
+    ]
+  },
+  "key_components": [
+    {
+      "name": "ImageUploader",
+      "purpose": "Handle file uploads with drag-and-drop",
+      "features": [
+        "File validation",
+        "Preview generation",
+        "Progress indication"
+      ]
+    },
+    {
+      "name": "SteganographyEncoder",
+      "purpose": "Hide data in JPEG EXIF",
+      "features": [
+        "Payload encryption",
+        "EXIF modification",
+        "Image generation"
+      ]
+    },
+    {
+      "name": "SteganographyDecoder",
+      "purpose": "Extract hidden data from JPEG",
+      "features": [
+        "EXIF parsing",
+        "Payload decryption",
+        "Data validation"
+      ]
+    },
+    {
+      "name": "EncryptionManager",
+      "purpose": "Handle encryption/decryption operations",
+      "features": [
+        "Key generation",
+        "AES operations",
+        "Secure random generation"
+      ]
+    }
+  ],
+  "security_considerations": [
+    "Use strong encryption (AES-256-GCM)",
+    "Implement proper key derivation (PBKDF2)",
+    "Validate all user inputs",
+    "Clear sensitive data from memory",
+    "Use secure random number generation",
+    "Implement error handling for failed decryption"
+  ],
+  "exif_fields_for_steganography": [
+    "UserComment - Most flexible for arbitrary data",
+    "ImageDescription - Text description field",
+    "Artist - Author/creator information",
+    "Copyright - Copyright information",
+    "Software - Software used to create image",
+    "DocumentName - Document name field"
+  ]
+}
