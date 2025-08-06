@@ -41,17 +41,20 @@ A cross-platform React Native application for hiding encrypted messages in image
 ### Quick Start
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/your-org/stegnocchi.git
    cd stegnocchi
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Environment setup**
+
    ```bash
    # Copy environment template
    cp .env.example .env
@@ -61,6 +64,7 @@ A cross-platform React Native application for hiding encrypted messages in image
    ```
 
 4. **Start the development server**
+
    ```bash
    npm start
    ```
@@ -68,6 +72,7 @@ A cross-platform React Native application for hiding encrypted messages in image
 ### Platform-Specific Setup
 
 #### Web Development
+
 ```bash
 # Start web development server
 npm run web
@@ -77,6 +82,7 @@ open http://localhost:19006
 ```
 
 #### iOS Development
+
 ```bash
 # Install iOS dependencies (macOS only)
 cd ios && pod install && cd ..
@@ -86,12 +92,14 @@ npm run ios
 ```
 
 #### Android Development
+
 ```bash
 # Start Android development
 npm run android
 ```
 
 #### Expo Development
+
 ```bash
 # Start Expo development
 npm run expo
@@ -100,16 +108,19 @@ npm run expo
 ### Platform-Specific Requirements
 
 #### Web Development
+
 - **Modern Browser**: Chrome, Firefox, Safari, or Edge
 - **Web Developer Tools**: Browser dev tools for debugging
 
 #### iOS Development
+
 - **macOS**: Required for iOS development
 - **Xcode** (latest version)
 - **iOS Simulator** or physical iOS device
 - **CocoaPods** (`sudo gem install cocoapods`)
 
 #### Android Development
+
 - **Android Studio** (latest version)
 - **Android SDK** (API level 21 or higher)
 - **Android Emulator** or physical Android device
@@ -120,6 +131,7 @@ npm run expo
 ### Available Scripts
 
 #### Development
+
 ```bash
 # Start development server
 npm start
@@ -132,6 +144,7 @@ npm run expo         # Expo development
 ```
 
 #### Building
+
 ```bash
 # Development builds
 npm run build:web:dev
@@ -145,6 +158,7 @@ npm run build:android:prod
 ```
 
 #### Testing
+
 ```bash
 # Run all tests
 npm test
@@ -162,6 +176,7 @@ npm run test:watch
 ```
 
 #### Code Quality
+
 ```bash
 # Linting
 npm run lint
@@ -177,6 +192,7 @@ npm run format:check
 ```
 
 #### Utilities
+
 ```bash
 # Clean build artifacts
 npm run clean
@@ -228,6 +244,7 @@ stegnocchi/
 ### Cryptographic Schemes
 
 #### AES-256-GCM Encryption
+
 - **Algorithm**: AES-256-GCM (Galois/Counter Mode)
 - **Key Size**: 256 bits (32 bytes)
 - **Mode**: Authenticated encryption with associated data
@@ -235,6 +252,7 @@ stegnocchi/
 - **Benefits**: Provides both confidentiality and authenticity
 
 #### PBKDF2 Key Derivation
+
 - **Algorithm**: PBKDF2 (Password-Based Key Derivation Function 2)
 - **Hash Function**: SHA-256
 - **Iterations**: 100,000 iterations (configurable)
@@ -242,6 +260,7 @@ stegnocchi/
 - **Purpose**: Converts user passwords into cryptographic keys
 
 #### Security Parameters
+
 ```typescript
 const SECURITY_CONFIG = {
   keySize: 256,           // AES-256
@@ -255,6 +274,7 @@ const SECURITY_CONFIG = {
 ### EXIF Field Strategies
 
 #### Supported EXIF Fields
+
 - **UserComment**: Primary field for steganography (max 65535 bytes)
 - **ImageDescription**: Secondary field for additional data (max 65535 bytes)
 - **Artist**: Metadata field for attribution (max 255 bytes)
@@ -262,12 +282,14 @@ const SECURITY_CONFIG = {
 - **Software**: Application identification (max 255 bytes)
 
 #### Field Selection Strategy
+
 1. **Primary Field**: UserComment (largest capacity)
 2. **Secondary Fields**: ImageDescription, Artist, Copyright
 3. **Fallback**: Software field for small payloads
 4. **Multiple Fields**: Distribute large payloads across multiple fields
 
 #### Data Format
+
 ```typescript
 interface ExifPayload {
   version: string;        // Protocol version
@@ -285,18 +307,21 @@ interface ExifPayload {
 ### Security Best Practices
 
 #### Input Validation
+
 - **File Validation**: JPEG format, size limits, integrity checks
 - **Password Validation**: Strength requirements, common password detection
 - **Message Validation**: Length limits, content sanitization
 - **Operation Validation**: Complete workflow validation
 
 #### Memory Management
+
 - **Secure Clearing**: Sensitive data cleared from memory after use
 - **No Logging**: Passwords and keys never logged
 - **Garbage Collection**: Prompt cleanup of sensitive objects
 - **Buffer Protection**: Protected memory for cryptographic operations
 
 #### Error Handling
+
 - **Non-Revealing Errors**: Error messages don't leak sensitive information
 - **Graceful Degradation**: Fail securely without exposing vulnerabilities
 - **Audit Logging**: Security-relevant events logged for monitoring
@@ -305,18 +330,21 @@ interface ExifPayload {
 ### Platform Security
 
 #### Web Security
+
 - **HTTPS Enforcement**: All network requests use HTTPS
 - **CSP Headers**: Content Security Policy for XSS protection
 - **Secure Storage**: Browser secure storage for sensitive data
 - **Input Sanitization**: All user inputs sanitized and validated
 
 #### Mobile Security
+
 - **Biometric Authentication**: Touch ID / Face ID integration
 - **Secure Storage**: Platform-specific secure storage (Keychain / Keystore)
 - **Permission Management**: Minimal permission requests
 - **Code Obfuscation**: Production builds obfuscated
 
 #### Cross-Platform Security
+
 - **Consistent Validation**: Same validation logic across platforms
 - **Unified Error Handling**: Consistent error handling patterns
 - **Shared Security Config**: Common security configuration
@@ -433,4 +461,4 @@ For support and questions:
 
 ---
 
-**Note**: This is a development version. Production use requires additional security audits and testing. 
+**Note**: This is a development version. Production use requires additional security audits and testing.
