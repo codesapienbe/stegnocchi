@@ -33,6 +33,8 @@ export * from './ciCdPipeline';
 export * from './infrastructureAsCode';
 export * from './documentationSystem';
 export * from './helpSystem';
+export * from './reportingSystem';
+export * from './insightsEngine';
 
 // Types exports
 export type {
