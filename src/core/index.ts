@@ -49,6 +49,8 @@ export * from './backup';
 export * from './cryptoPlugins';
 export * from './hsm';
 export * from './certPinning';
+export * from './mfa';
+export * from './secureEnclave';
 
 // Production-ready features
 export * from './rateLimiter';
