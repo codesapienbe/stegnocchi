@@ -85,6 +85,21 @@ function createLogEntry(
 /**
  * Write log entry to application.log
  */
+const logSinks: Array<(entry: LogEntry) => void | Promise<void>> = [];
+
+export function registerLogSink(sink: (entry: LogEntry) => void | Promise<void>): void {
+  logSinks.push(sink);
+}
+
+export function unregisterLogSink(sink: (entry: LogEntry) => void | Promise<void>): void {
+  const idx = logSinks.indexOf(sink);
+  if (idx >= 0) logSinks.splice(idx, 1);
+}
+
+export function clearLogSinks(): void {
+  logSinks.length = 0;
+}
+
 function writeToLog(entry: LogEntry): void {
   try {
     // In a real implementation, this would write to application.log
@@ -104,6 +119,15 @@ function writeToLog(entry: LogEntry): void {
       case LogLevel.DEBUG:
         console.debug(logString);
         break;
+    }
+    // Forward to sinks (best-effort)
+    for (const sink of logSinks) {
+      try {
+        const res = sink(entry);
+        if (res && typeof (res as any).then === 'function') {
+          (res as Promise<void>).catch(() => {});
+        }
+      } catch {}
     }
   } catch (error) {
     // Fallback logging if JSON serialization fails

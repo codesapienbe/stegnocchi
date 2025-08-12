@@ -34,6 +34,18 @@ export * from './modelRegistry';
 export * from './vectorCompression';
 export * from './vectorStats';
 export * from './vectorDB';
+export * from './taskQueue';
+export * from './modelPipeline';
+export * from './ai/face';
+export * from './ai/object';
+export * from './ai/scene';
+export * from './ai/loaders/face';
+export * from './ai/loaders/object';
+export * from './ai/loaders/scene';
+export * from './tracing';
+export * from './secureConfig';
+export * from './errorHandling';
+export * from './backup';
 
 // Production-ready features
 export * from './rateLimiter';
