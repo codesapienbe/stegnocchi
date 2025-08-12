@@ -79,8 +79,8 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 - [x] Implement batch processing for multiple images.
 - [x] Add compression options for output images.
 - [x] Implement secure key storage using platform-specific secure storage.
-- [ ] Add support for hardware security modules (HSM) integration.
-- [ ] Implement certificate pinning for network requests.
+- [x] Add support for hardware security modules (HSM) integration.
+- [x] Implement certificate pinning for network requests.
 - [x] Add support for custom encryption algorithms via plugin system.
 - [x] Implement secure random number generation with entropy validation.
 - [x] Add support for key derivation function selection (Argon2, scrypt).

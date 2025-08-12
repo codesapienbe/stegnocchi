@@ -47,6 +47,8 @@ export * from './secureConfig';
 export * from './errorHandling';
 export * from './backup';
 export * from './cryptoPlugins';
+export * from './hsm';
+export * from './certPinning';
 
 // Production-ready features
 export * from './rateLimiter';
