@@ -46,6 +46,7 @@ export * from './tracing';
 export * from './secureConfig';
 export * from './errorHandling';
 export * from './backup';
+export * from './cryptoPlugins';
 
 // Production-ready features
 export * from './rateLimiter';
