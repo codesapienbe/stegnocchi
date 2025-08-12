@@ -251,4 +251,23 @@ export class ImageCompression {
 
     return { valid: true };
   }
+}
+
+export async function optimizeVectorEnhancedImage(jpegBytes: ArrayBuffer): Promise<CompressionResult> {
+  const opts = ImageCompression.getRecommendedSettings(jpegBytes.byteLength);
+  const validation = ImageCompression.validateOptions(opts);
+  if (!validation.valid) {
+    return { success: false, originalSize: jpegBytes.byteLength, error: validation.error };
+  }
+  const result = await ImageCompression.compress(jpegBytes, opts);
+  if (result.success) {
+    logInfo(Component.FILE_SYSTEM, 'Vector-enhanced image optimized', {
+      originalSize: result.originalSize,
+      compressedSize: result.compressedSize,
+      compressionRatio: result.compressionRatio,
+    });
+  } else {
+    logError(Component.FILE_SYSTEM, 'Vector-enhanced image optimization failed', { error: result.error });
+  }
+  return result;
 } 

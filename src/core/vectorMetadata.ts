@@ -1,5 +1,8 @@
 import { ValidationResult } from '../types';
 import { logInfo, logError, logValidation, Component } from './logger';
+import { gzipCompress, gzipDecompress } from './compression';
+import { encryptMessage, decryptMessage } from './crypto';
+import { encryptChunked, decryptChunked, ChunkedManifest } from './chunkedCrypto';
 
 export interface FaceLandmarkPoint {
   x: number;
@@ -270,4 +273,261 @@ export function getVectorPayloadSizeInfo(metadata: VectorMetadata): {
     fitsInExif: estimatedBytes <= EXIF_USER_COMMENT_MAX_BYTES,
     fitsInSingleField: estimatedBytes <= EXIF_USER_COMMENT_MAX_BYTES,
   };
+}
+
+// Utility: base64 <-> bytes (aligned with existing crypto approach)
+function bytesToBase64(bytes: Uint8Array): string {
+  let binary = '';
+  for (let i = 0; i < bytes.byteLength; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
+function base64ToBytes(base64: string): Uint8Array {
+  const binary = atob(base64);
+  const out = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    out[i] = binary.charCodeAt(i);
+  }
+  return out;
+}
+
+export async function prepareVectorPayload(
+  metadata: VectorMetadata,
+  options?: { compress?: boolean }
+): Promise<{
+  payloadBase64: string;
+  isCompressed: boolean;
+  sizeBytes: number;
+}> {
+  const shouldCompress = options?.compress === true;
+
+  // Serialize first with existing validation
+  const serialized = JSON.stringify(metadata);
+  const uncompressedBytes = new TextEncoder().encode(serialized);
+
+  if (!shouldCompress) {
+    const base64 = bytesToBase64(uncompressedBytes);
+    const sizeBytes = uncompressedBytes.byteLength;
+    logInfo(Component.APP, 'Prepared uncompressed vector payload', { sizeBytes });
+    return { payloadBase64: base64, isCompressed: false, sizeBytes };
+  }
+
+  const comp = await gzipCompress(uncompressedBytes);
+  if (!comp.success || !comp.data) {
+    const err = comp.error || 'Compression failed';
+    logError(Component.APP, 'Vector payload compression failed', { error: err });
+    throw new Error(err);
+  }
+
+  const base64 = bytesToBase64(comp.data);
+  const sizeBytes = comp.data.byteLength;
+  logInfo(Component.APP, 'Prepared compressed vector payload', { sizeBytes });
+  return { payloadBase64: base64, isCompressed: true, sizeBytes };
+}
+
+export async function parseVectorPayload(
+  payloadBase64: string,
+  isCompressed: boolean
+): Promise<DeserializationResult> {
+  try {
+    const bytes = base64ToBytes(payloadBase64);
+    let jsonBytes: Uint8Array = bytes;
+
+    if (isCompressed) {
+      const decomp = await gzipDecompress(bytes);
+      if (!decomp.success || !decomp.data) {
+        const err = decomp.error || 'Decompression failed';
+        logError(Component.APP, 'Vector payload decompression failed', { error: err });
+        return { success: false, errors: [err] };
+      }
+      jsonBytes = decomp.data;
+    }
+
+    const json = new TextDecoder().decode(jsonBytes);
+    return deserializeVectorMetadata(json);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Vector payload parse error';
+    logError(Component.APP, 'Vector payload parse exception', { error: message });
+    return { success: false, errors: [message] };
+  }
+}
+
+async function sha256Base64(inputBytes: Uint8Array): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', inputBytes);
+  return bytesToBase64(new Uint8Array(digest));
+}
+
+export interface VectorEncryptionOptions {
+  compress?: boolean;
+  chunkThresholdBytes?: number; // force chunked at/over threshold; default EXIF limit
+  onProgress?: (progress0to1: number) => void;
+}
+
+export type VectorEncryptionResult =
+  | {
+      success: true;
+      mode: 'single';
+      isCompressed: boolean;
+      plaintextBytes: number;
+      ciphertextBase64: string;
+      cryptoMetadata: any; // keep flexible to avoid breaking existing types
+      digestBase64: string;
+    }
+  | {
+      success: true;
+      mode: 'chunked';
+      isCompressed: boolean;
+      plaintextBytes: number;
+      chunksBase64: string[];
+      manifest: ChunkedManifest;
+      digestBase64: string;
+    }
+  | { success: false; error: string };
+
+export async function encryptVectorMetadata(
+  metadata: VectorMetadata,
+  password: string,
+  options?: VectorEncryptionOptions
+): Promise<VectorEncryptionResult> {
+  try {
+    const shouldCompress = options?.compress === true;
+    const serialized = JSON.stringify(metadata);
+    const bytes = new TextEncoder().encode(serialized);
+
+    const digestBase64 = await sha256Base64(bytes);
+
+    let toEncrypt = bytes;
+    if (shouldCompress) {
+      const comp = await gzipCompress(bytes);
+      if (!comp.success || !comp.data) {
+        const err = comp.error || 'Compression failed';
+        logError(Component.CRYPTO, 'Vector encryption: compression failed', { error: err });
+        return { success: false, error: err };
+      }
+      toEncrypt = comp.data;
+    }
+
+    const threshold = options?.chunkThresholdBytes ?? EXIF_USER_COMMENT_MAX_BYTES;
+
+    if (toEncrypt.byteLength >= threshold) {
+      const enc = await encryptChunked(toEncrypt, password, { onProgress: options?.onProgress, aadPrefix: 'VEC' });
+      if (!enc.success || !enc.chunks || !enc.manifest) {
+        const err = (enc as any).error || 'Chunked encryption failed';
+        logError(Component.CRYPTO, 'Vector chunked encryption failed', { error: err });
+        return { success: false, error: err };
+      }
+      logInfo(Component.CRYPTO, 'Vector metadata encrypted (chunked)', { chunks: enc.chunks.length, bytes: toEncrypt.byteLength });
+      return {
+        success: true,
+        mode: 'chunked',
+        isCompressed: shouldCompress,
+        plaintextBytes: toEncrypt.byteLength,
+        chunksBase64: enc.chunks,
+        manifest: enc.manifest,
+        digestBase64,
+      };
+    } else {
+      // Encrypt as single message by base64-wrapping the bytes into a string
+      const base64Payload = bytesToBase64(toEncrypt);
+      const enc = await encryptMessage({ message: base64Payload, password });
+      if (!enc.success || !enc.data || !enc.metadata) {
+        const err = enc.error || 'Encryption failed';
+        logError(Component.CRYPTO, 'Vector single encryption failed', { error: err });
+        return { success: false, error: err };
+      }
+      logInfo(Component.CRYPTO, 'Vector metadata encrypted (single)', { bytes: toEncrypt.byteLength });
+      return {
+        success: true,
+        mode: 'single',
+        isCompressed: shouldCompress,
+        plaintextBytes: toEncrypt.byteLength,
+        ciphertextBase64: enc.data,
+        cryptoMetadata: enc.metadata,
+        digestBase64,
+      };
+    }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Vector encryption exception';
+    logError(Component.CRYPTO, 'Vector encryption exception', { error: message });
+    return { success: false, error: message };
+  }
+}
+
+export type VectorDecryptionInput =
+  | { mode: 'single'; ciphertextBase64: string; cryptoMetadata: any; isCompressed: boolean }
+  | { mode: 'chunked'; chunksBase64: string[]; manifest: ChunkedManifest; isCompressed: boolean };
+
+export async function decryptVectorMetadata(
+  input: VectorDecryptionInput,
+  password: string
+): Promise<DeserializationResult> {
+  try {
+    if (input.mode === 'single') {
+      const dec = await decryptMessage({ encryptedData: input.ciphertextBase64, password, metadata: input.cryptoMetadata });
+      if (!dec.success || !dec.data) {
+        const err = dec.error || 'Decryption failed';
+        logError(Component.CRYPTO, 'Vector single decryption failed', { error: err });
+        return { success: false, errors: [err] };
+      }
+      // dec.data is base64 of the original bytes (possibly compressed)
+      return parseVectorPayload(dec.data, input.isCompressed);
+    } else {
+      const dec = await decryptChunked(input.chunksBase64, input.manifest, password, { aadPrefix: 'VEC' });
+      if (!dec.success || !dec.data) {
+        const err = dec.error || 'Chunked decryption failed';
+        logError(Component.CRYPTO, 'Vector chunked decryption failed', { error: err });
+        return { success: false, errors: [err] };
+      }
+      const base64 = bytesToBase64(dec.data);
+      return parseVectorPayload(base64, input.isCompressed);
+    }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Vector decryption exception';
+    logError(Component.CRYPTO, 'Vector decryption exception', { error: message });
+    return { success: false, errors: [message] };
+  }
+}
+
+export async function validateVectorEncryption(
+  encrypted: VectorEncryptionResult
+): Promise<ValidationResult> {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  try {
+    if (!encrypted || (encrypted as any).success !== true) {
+      errors.push('Invalid encryption result');
+      return { isValid: false, errors, warnings };
+    }
+
+    if (encrypted.mode === 'single') {
+      if (!encrypted.ciphertextBase64 || !encrypted.cryptoMetadata) {
+        errors.push('Missing ciphertext or metadata');
+      }
+    } else {
+      if (!encrypted.chunksBase64 || encrypted.chunksBase64.length === 0) {
+        errors.push('No chunks present');
+      }
+      if (!encrypted.manifest) {
+        errors.push('Missing chunked manifest');
+      }
+    }
+
+    // Best-effort integrity check: decrypt and compare digest
+    // Note: Avoid for very large payloads in production; here for validation utility only
+    // Skipping actual decrypt here to avoid requiring the password
+
+    return { isValid: errors.length === 0, errors, warnings };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Validation error';
+    errors.push(message);
+    return { isValid: false, errors, warnings };
+  }
+}
+
+export function recommendVectorFormat(bytesLength: number): { compress: boolean; chunk: boolean } {
+  const compress = bytesLength > 4096; // compress if >4KB
+  const chunk = bytesLength > EXIF_USER_COMMENT_MAX_BYTES; // chunk if exceeds EXIF field
+  return { compress, chunk };
 } 

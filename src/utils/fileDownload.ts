@@ -181,3 +181,16 @@ export async function downloadJsonFile(
     ...options,
   });
 } 
+
+export async function downloadJpgv(
+  bytes: Uint8Array,
+  filename: string = 'image.jpgv',
+  options: DownloadOptions = {}
+): Promise<DownloadResult> {
+  const arrayBuffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+  return downloadFile(arrayBuffer, {
+    filename,
+    mimeType: 'application/octet-stream',
+    ...options,
+  });
+} 

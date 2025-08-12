@@ -208,3 +208,24 @@ export function getPlatformFileOperations() {
     isDownloadAvailable,
   };
 } 
+
+export async function shareJpgvBytes(bytes: Uint8Array, filename: string = 'image.jpgv'): Promise<boolean> {
+  try {
+    if (!(await Sharing.isAvailableAsync())) {
+      console.warn('Sharing is not available on this platform');
+      return false;
+    }
+    const fileUri = `${FileSystem.documentDirectory}${filename}`;
+    const base64 = Buffer.from(bytes).toString('base64');
+    await FileSystem.writeAsStringAsync(fileUri, base64, { encoding: FileSystem.EncodingType.Base64 });
+    const result = await Sharing.shareAsync(fileUri, {
+      mimeType: 'application/octet-stream',
+      dialogTitle: 'Share .jpgv file',
+      UTI: 'public.data',
+    });
+    return result.shared;
+  } catch (error) {
+    console.error('Share .jpgv error:', error);
+    return false;
+  }
+} 

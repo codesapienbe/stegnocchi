@@ -258,3 +258,22 @@ export class BatchProcessor {
     });
   }
 } 
+
+export interface VectorBatchOptions {
+  onVectorProgress?: (jobId: string, progress0to1: number) => void;
+}
+
+export type VectorInjectFn = (file: File, opts: { onProgress?: (p: number) => void }) => Promise<any>;
+
+export async function processVectorBatch(
+  files: File[],
+  injectFn: VectorInjectFn,
+  options: VectorBatchOptions = {}
+): Promise<BatchResult> {
+  const bp = new BatchProcessor({
+    maxConcurrent: 3,
+    onJobProgress: (job) => options.onVectorProgress?.(job.id, Math.min(1, job.progress / 100)),
+  });
+  bp.addFiles(files);
+  return bp.startProcessing((file) => injectFn(file, { onProgress: (p) => {/* hook for fine-grained */} }));
+} 

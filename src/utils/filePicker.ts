@@ -5,6 +5,7 @@
 
 import * as ImagePicker from 'expo-image-picker';
 import { Platform } from 'react-native';
+import { detectImageContainer } from '@/core/jpgv';
 
 export interface FilePickerResult {
   file: File | null;
@@ -22,6 +23,14 @@ export interface FilePickerOptions {
   quality?: number;
   allowsMultipleSelection?: boolean;
   maxFiles?: number;
+}
+
+export interface DualUploadResult {
+  container: 'jpeg' | 'jpgv' | 'unknown';
+  jpegBytes?: Uint8Array;
+  jpgvBytes?: Uint8Array;
+  fileName?: string;
+  mimeType?: string;
 }
 
 /**
@@ -207,4 +216,21 @@ export function getPlatformFilePicker() {
     // Mobile implementation uses Expo ImagePicker
     return pickFiles;
   }
+} 
+
+export async function loadBytesFromUri(uri: string): Promise<Uint8Array> {
+  const res = await fetch(uri);
+  const buf = await res.arrayBuffer();
+  return new Uint8Array(buf);
+}
+
+export async function detectAndLoadContainerFromUri(uri: string, fileName?: string): Promise<DualUploadResult> {
+  const bytes = await loadBytesFromUri(uri);
+  const container = detectImageContainer(bytes);
+  if (container === 'jpgv') {
+    return { container, jpgvBytes: bytes, fileName, mimeType: 'application/octet-stream' };
+  } else if (container === 'jpeg') {
+    return { container, jpegBytes: bytes, fileName, mimeType: 'image/jpeg' };
+  }
+  return { container: 'unknown', fileName };
 } 

@@ -27,4 +27,6 @@ export * from './userFeedback';
 export * from './advancedSearch';
 export * from './realTimeCollaboration';
 export * from './customWorkflows';
-export * from './platformSecurity'; 
+export * from './platformSecurity';
+export * from './vectorIO';
+export * from './similarityVisualization'; 

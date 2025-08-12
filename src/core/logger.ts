@@ -21,7 +21,8 @@ export enum Component {
   UI = 'ui',
   VALIDATION = 'validation',
   STEGANOGRAPHY = 'steganography',
-  APP = 'app'
+  APP = 'app',
+  AUDIT = 'audit'
 }
 
 // Global correlation ID for request tracking
