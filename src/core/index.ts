@@ -8,6 +8,8 @@ export * from './crypto';
 export * from './exif';
 export * from './logger';
 export * from './validation';
+export * from './vectorMetadata';
+export * from './compression';
 
 // Production-ready features
 export * from './rateLimiter';
