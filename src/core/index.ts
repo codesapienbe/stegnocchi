@@ -60,6 +60,7 @@ export * from './healthChecks';
 export * from './capacityPlanning';
 export * from './slaMonitoring';
 export * from './costOptimization';
+export * from './predictiveAnalytics';
 
 // Production-ready features
 export * from './rateLimiter';
