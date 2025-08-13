@@ -109,6 +109,37 @@ export async function shareFile(
   options: ShareOptions = {}
 ): Promise<boolean> {
   try {
+    // Web-specific share using Web Share API when available
+    if (Platform.OS === 'web') {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const nav: any = typeof navigator !== 'undefined' ? navigator : {};
+        const mimeType = options.mimeType || data.metadata?.mimeType || 'image/jpeg';
+        const fileName = data.filename || 'image.jpg';
+        const blob = await dataToBlob(data.imageData, mimeType);
+
+        if (nav?.canShare && nav?.share) {
+          if (typeof File !== 'undefined' && nav.canShare({ files: [new File([blob], fileName, { type: mimeType })] })) {
+            const webFile = new File([blob], fileName, { type: mimeType });
+            await nav.share({ files: [webFile], title: options.title || 'Share Image' });
+            logInfo(Component.FILE_SYSTEM, 'Web share invoked (files)', { fileName, bytes: blob.size, mimeType });
+            return true;
+          }
+          // Fallback: share URL
+          const url = URL.createObjectURL(blob);
+          await nav.share({ title: options.title || 'Share Image', url });
+          URL.revokeObjectURL(url);
+          logInfo(Component.FILE_SYSTEM, 'Web share invoked (url)', { fileName, bytes: blob.size, mimeType });
+          return true;
+        }
+      } catch (e) {
+        logWarn(Component.FILE_SYSTEM, 'Web Share API failed; will fallback to download', { error: e instanceof Error ? e.message : String(e) });
+      }
+      // If we reached here, try a download fallback for web
+      const downloaded = await downloadFileWeb(data, data.filename, options.mimeType || data.metadata?.mimeType || 'image/jpeg');
+      return downloaded;
+    }
+
     const available = await Sharing.isAvailableAsync();
     if (!available) {
       logWarn(Component.FILE_SYSTEM, 'Sharing not available on this platform');
