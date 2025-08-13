@@ -155,8 +155,8 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 - [x] Design vector data preview component showing detected faces and objects
 - [x] Add vector metadata extraction results display in decoding interface
 - [x] Create vector search interface for similarity matching
-- [ ] Implement face thumbnail gallery for extracted face embeddings
-- [ ] Add object detection results visualization with bounding boxes
+- [x] Implement face thumbnail gallery for extracted face embeddings
+- [x] Add object detection results visualization with bounding boxes
 - [ ] Create scene embedding similarity comparison interface
 - [x] Add vector metadata export functionality (JSON download)
 - [x] Implement vector data import from external sources

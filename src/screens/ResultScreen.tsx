@@ -15,6 +15,8 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { VectorPreview } from '@/components';
+import { FaceThumbnailGallery } from '@/components';
+import { ObjectDetectionsList } from '@/components';
 
 import { RootStackParamList } from '@/navigation/Navigation';
 
@@ -59,6 +61,18 @@ export const ResultScreen: React.FC = () => {
               objects={(data as any).objects}
               scene={(data as any).scene}
             />
+            {Array.isArray((data as any).faces) && (data as any).faces.length > 0 && (
+              <View style={{ marginTop: 12 }}>
+                <Text style={[styles.dataLabel, { marginBottom: 8 }]}>Faces</Text>
+                <FaceThumbnailGallery faces={(data as any).faces} />
+              </View>
+            )}
+            {Array.isArray((data as any).objects) && (data as any).objects.length > 0 && (
+              <View style={{ marginTop: 12 }}>
+                <Text style={[styles.dataLabel, { marginBottom: 8 }]}>Objects</Text>
+                <ObjectDetectionsList objects={(data as any).objects} />
+              </View>
+            )}
           </View>
         )}
       </View>
