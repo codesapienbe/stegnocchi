@@ -29,4 +29,5 @@ export * from './realTimeCollaboration';
 export * from './customWorkflows';
 export * from './platformSecurity';
 export * from './vectorIO';
-export * from './similarityVisualization'; 
+export * from './similarityVisualization';
+export * from './voiceCommands'; 

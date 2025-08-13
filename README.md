@@ -471,3 +471,5 @@ For support and questions:
 - Performance Considerations (Vector Sizes): docs/PERFORMANCE_CONSIDERATIONS.md
 - Troubleshooting Vector Data: docs/VECTOR_TROUBLESHOOTING.md
 - Vector API Reference: docs/VECTOR_API_REFERENCE.md
+- Emulator Testing Guide: docs/EMULATOR_TESTING.md
+- Device Compatibility Matrix: docs/DEVICE_COMPAT_MATRIX.md

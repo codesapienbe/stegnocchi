@@ -169,7 +169,7 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 - [x] Implement dark mode and theme switching.
 - [x] Add haptic feedback for all user interactions.
 - [x] Implement gesture-based navigation and shortcuts.
-- [ ] Add support for voice commands and speech-to-text.
+- [x] Add support for voice commands and speech-to-text.
 - [x] Implement adaptive UI based on device capabilities.
 - [x] Add support for custom themes and branding.
 - [x] Implement progressive web app (PWA) features for web.
@@ -194,7 +194,7 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 - [x] Implement file picker that selects browser files or mobile media depending on platform.
 - [x] Implement abstraction for downloading/sharing files for both web and mobile.
 - [x] Tune breakpoints and layout for 320px, 768px, and 1024px screens.
-- [ ] Test visual layouts on emulators for popular mobile screen sizes.
+- [x] Test visual layouts on emulators for popular mobile screen sizes.
 - [x] Replace or polyfill all web APIs (blob, window, document) to ensure cross-platform compatibility.
 
 ### Vector File Format Handling
@@ -265,7 +265,7 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 - [ ] Implement accessibility testing automation.
 - [ ] Add visual regression testing for UI components.
 - [ ] Implement cross-browser compatibility testing.
-- [ ] Add device compatibility testing matrix.
+- [x] Add device compatibility testing matrix.
 - [ ] Implement automated security audits and penetration testing.
 - [ ] Add compliance testing for data protection regulations.
 - [ ] Implement chaos engineering and failure testing.
@@ -370,7 +370,7 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 - [x] Implement secure key management and rotation.
 - [x] Add support for hardware security modules (HSM).
 - [ ] Implement secure code signing and integrity verification.
-- [ ] Add support for certificate transparency and validation.
+- [x] Add support for certificate transparency and validation.
 - [x] Implement secure random number generation validation.
 - [x] Add support for secure enclave and trusted execution environments.
 - [x] Implement secure deletion and data sanitization.

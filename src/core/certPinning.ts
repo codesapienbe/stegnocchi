@@ -11,6 +11,7 @@ export interface PinPolicyEntry {
 
 export interface PinningConfigOptions {
 	strictMode?: boolean; // if true, unknown hosts are blocked when any policy exists
+	requireCertificateTransparency?: boolean; // if true, require CT presence (platform transport must enforce)
 }
 
 export interface PinnedFetchOptions {
@@ -32,8 +33,8 @@ let transport: PinnedTransport | null = null;
 export function configureCertPinning(policy: PinPolicyEntry[], options?: PinningConfigOptions): void {
 	pinPolicy = Array.isArray(policy) ? policy.slice() : [];
 	pinningOptions = { ...(options || {}) };
-	logInfo(Component.APP, 'Certificate pinning configured', { entries: pinPolicy.length, strictMode: !!pinningOptions.strictMode });
-	recordAuditEvent({ type: 'cert_pinning_configured', actor: 'system', severity: 'INFO', details: { entries: pinPolicy.length, strictMode: !!pinningOptions.strictMode } });
+	logInfo(Component.APP, 'Certificate pinning configured', { entries: pinPolicy.length, strictMode: !!pinningOptions.strictMode, requireCT: !!pinningOptions.requireCertificateTransparency });
+	recordAuditEvent({ type: 'cert_pinning_configured', actor: 'system', severity: 'INFO', details: { entries: pinPolicy.length, strictMode: !!pinningOptions.strictMode, requireCT: !!pinningOptions.requireCertificateTransparency } });
 }
 
 export function getCertPinningPolicy(): PinPolicyEntry[] {
@@ -52,6 +53,18 @@ export function clearPinnedTransport(): void {
 
 export function isPinningActive(): boolean {
 	return !!transport && pinPolicy.length > 0;
+}
+
+export function isCTRequired(): boolean {
+	return !!pinningOptions.requireCertificateTransparency;
+}
+
+export function reportCTStatus(host: string, present: boolean, compliant: boolean): void {
+	if (!host) return;
+	const level = present && compliant ? 'INFO' : 'WARN';
+	const message = present && compliant ? 'Certificate Transparency verified' : present ? 'Certificate Transparency present but non-compliant' : 'Certificate Transparency not present';
+	logInfo(Component.APP, `CT status: ${message}`, { host, present, compliant });
+	recordAuditEvent({ type: 'cert_transparency', actor: 'system', severity: level as any, details: { host, present, compliant, required: !!pinningOptions.requireCertificateTransparency } });
 }
 
 function matchHost(host: string): PinPolicyEntry | undefined {

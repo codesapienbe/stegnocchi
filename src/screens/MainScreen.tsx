@@ -24,6 +24,7 @@ import { MobileLayout, MobileScrollView } from '@/components/layout';
 import { FileUploadAnimation } from '@/components/animations';
 import { AIAnalysisProgress } from '@/components/animations';
 import { pickFiles, useResponsive } from '@/utils';
+import { isVoiceSupported, startVoiceListening } from '@/utils';
 import Logo from '@/components/Logo';
 import { VectorPreview } from '@/components';
 
@@ -35,6 +36,8 @@ export const MainScreen: React.FC = () => {
   const { validateFile, validateOperation } = useSteganography();
   const [isLoading, setIsLoading] = useState(false);
   const { isMobile, isTablet, isDesktop, SPACING, PADDING, TOUCH_TARGETS } = useResponsive();
+  const [voiceSession, setVoiceSession] = useState<null | { stop: () => void }>(null);
+  const [isListening, setIsListening] = useState(false);
 
   const pickImage = async (): Promise<void> => {
     try {
@@ -97,6 +100,33 @@ export const MainScreen: React.FC = () => {
   const resetApp = (): void => {
     dispatch({ type: 'RESET_STATE' });
     logUserInteraction('app_reset', true);
+  };
+
+  const handleVoiceToggle = (): void => {
+    if (voiceSession) {
+      voiceSession.stop();
+      setVoiceSession(null);
+      setIsListening(false);
+      return;
+    }
+    const session = startVoiceListening(
+      (text, isFinal) => {
+        if (isFinal) {
+          dispatch({ type: 'SET_MESSAGE', payload: text });
+        }
+      },
+      (err) => {
+        // Non-fatal: log and reset listening state
+        console.error('Voice error', err);
+        setIsListening(false);
+        setVoiceSession(null);
+      },
+      { lang: 'en-US', interimResults: true, continuous: false }
+    );
+    if (session) {
+      setVoiceSession(session);
+      setIsListening(true);
+    }
   };
 
   return (
@@ -180,6 +210,16 @@ export const MainScreen: React.FC = () => {
                   <Text style={styles.modeButtonText}>Extract Message</Text>
                 </TouchableOpacity>
               </View>
+
+              {isVoiceSupported() && (
+                <TouchableOpacity
+                  style={[styles.voiceButton, { minHeight: TOUCH_TARGETS.medium }]}
+                  onPress={handleVoiceToggle}
+                >
+                  <Ionicons name={isListening ? 'mic-off' : 'mic'} size={20} color="#1a1a1a" />
+                  <Text style={styles.voiceButtonText}>{isListening ? 'Stop Voice Input' : 'Voice Input'}</Text>
+                </TouchableOpacity>
+              )}
 
               {state.includeVectorMetadata && (
                 <View style={{ width: '100%', marginTop: 16 }}>
@@ -349,6 +389,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: 'white',
+    marginLeft: 8,
+  },
+  voiceButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: 'white',
+    borderRadius: 12,
+    marginTop: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  voiceButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1a1a1a',
     marginLeft: 8,
   },
   errorSection: {
