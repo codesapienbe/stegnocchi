@@ -8,6 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { MainScreen } from '@/screens/MainScreen';
 import { ResultScreen } from '@/screens/ResultScreen';
 import { SettingsScreen } from '@/screens/SettingsScreen';
+import { SearchScreen } from '@/screens/SearchScreen';
 
 // Navigation types
 export type RootStackParamList = {
@@ -19,6 +20,7 @@ export type RootStackParamList = {
     data?: any;
   };
   Settings: undefined;
+  Search: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -65,6 +67,13 @@ export const Navigation: React.FC = () => {
         component={SettingsScreen}
         options={{
           title: 'Settings',
+        }}
+      />
+      <Stack.Screen 
+        name="Search" 
+        component={SearchScreen}
+        options={{
+          title: 'Search',
         }}
       />
     </Stack.Navigator>

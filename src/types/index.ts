@@ -13,6 +13,7 @@ export interface AppState {
   processedData: ProcessedData | null;
   extractedMessage: string;
   error: string | null;
+  includeVectorMetadata: boolean;
 }
 
 // Cryptographic Operations Interface

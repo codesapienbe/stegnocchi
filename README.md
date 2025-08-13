@@ -77,17 +77,13 @@ A cross-platform React Native application for hiding encrypted messages in image
 # Start web development server
 npm run web
 
-# Open in browser
-open http://localhost:19006
+# Open in browser: http://localhost:19006
 ```
 
 #### iOS Development
 
 ```bash
-# Install iOS dependencies (macOS only)
-cd ios && pod install && cd ..
-
-# Start iOS development
+# Start iOS development (macOS with Xcode)
 npm run ios
 ```
 
@@ -102,7 +98,7 @@ npm run android
 
 ```bash
 # Start Expo development
-npm run expo
+npm start
 ```
 
 ### Platform-Specific Requirements
@@ -146,15 +142,17 @@ npm run expo         # Expo development
 #### Building
 
 ```bash
-# Development builds
-npm run build:web:dev
-npm run build:ios:dev
-npm run build:android:dev
+# Android (APK/AAB)
+npm run build:android
 
-# Production builds
-npm run build:web:prod
-npm run build:ios:prod
-npm run build:android:prod
+# iOS (archive)
+npm run build:ios
+
+# Generic Expo build
+npm run build
+
+# Publish OTA update (Expo)
+npm run publish
 ```
 
 #### Testing

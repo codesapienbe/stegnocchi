@@ -10,6 +10,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Switch,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -21,8 +22,10 @@ import { RootStackParamList } from '@/navigation/Navigation';
 import { logUserInteraction, Component } from '@/core/logger';
 import { MobileLayout, MobileScrollView } from '@/components/layout';
 import { FileUploadAnimation } from '@/components/animations';
+import { AIAnalysisProgress } from '@/components/animations';
 import { pickFiles, useResponsive } from '@/utils';
 import Logo from '@/components/Logo';
+import { VectorPreview } from '@/components';
 
 type MainScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
 
@@ -136,11 +139,28 @@ export const MainScreen: React.FC = () => {
             </View>
           )}
 
+          {state.phase === 'processing' && (
+            <View style={{ alignItems: 'center', marginTop: 24 }}>
+              <AIAnalysisProgress isActive={true} progress={42} stage={'initializing'} />
+            </View>
+          )}
+
           {state.phase === 'input' && state.file && (
             <View style={styles.inputSection}>
               <View style={styles.fileInfo}>
                 <Ionicons name="image" size={24} color="#007AFF" />
                 <Text style={styles.fileName}>{state.file.name}</Text>
+              </View>
+              
+              <View style={styles.toggleRow}>
+                <View style={styles.toggleTextContainer}>
+                  <Text style={styles.toggleLabel}>Include Vector Metadata</Text>
+                  <Text style={styles.toggleSubtext}>Attach AI vector metadata when hiding</Text>
+                </View>
+                <Switch
+                  value={state.includeVectorMetadata}
+                  onValueChange={(value) => dispatch({ type: 'SET_INCLUDE_VECTOR_METADATA', payload: value })}
+                />
               </View>
               
               <View style={styles.modeButtons}>
@@ -160,6 +180,12 @@ export const MainScreen: React.FC = () => {
                   <Text style={styles.modeButtonText}>Extract Message</Text>
                 </TouchableOpacity>
               </View>
+
+              {state.includeVectorMetadata && (
+                <View style={{ width: '100%', marginTop: 16 }}>
+                  <VectorPreview faces={[]} objects={[]} scene={undefined} />
+                </View>
+              )}
             </View>
           )}
 
@@ -267,6 +293,36 @@ const styles = StyleSheet.create({
   modeButtons: {
     flexDirection: 'row',
     gap: 16,
+  },
+  toggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+    width: '100%'
+  },
+  toggleTextContainer: {
+    flexDirection: 'column',
+    flex: 1,
+    marginRight: 12,
+  },
+  toggleLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1a1a1a',
+  },
+  toggleSubtext: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 4,
   },
   modeButton: {
     flexDirection: 'row',

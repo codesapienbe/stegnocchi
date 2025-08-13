@@ -16,7 +16,8 @@ const initialState: AppState = {
   password: '',
   processedData: null,
   extractedMessage: '',
-  error: null
+  error: null,
+  includeVectorMetadata: false
 };
 
 // Action types
@@ -30,7 +31,8 @@ type AppAction =
   | { type: 'SET_EXTRACTED_MESSAGE'; payload: string }
   | { type: 'SET_ERROR'; payload: string | null }
   | { type: 'RESET_STATE' }
-  | { type: 'CLEAR_SENSITIVE_DATA' };
+  | { type: 'CLEAR_SENSITIVE_DATA' }
+  | { type: 'SET_INCLUDE_VECTOR_METADATA'; payload: boolean };
 
 // App state reducer
 function appReducer(state: AppState, action: AppAction): AppState {
@@ -80,6 +82,10 @@ function appReducer(state: AppState, action: AppAction): AppState {
         processedData: null,
         extractedMessage: ''
       };
+    
+    case 'SET_INCLUDE_VECTOR_METADATA':
+      logInfo(Component.APP, `Include vector metadata: ${action.payload}`);
+      return { ...state, includeVectorMetadata: action.payload };
     
     default:
       return state;

@@ -16,4 +16,5 @@ export { default as Logo } from './Logo';
 export { default as Header } from './Header';
 export * from './TouchTarget';
 export * from './DragDropZone';
-export * from './GestureHandler'; 
+export * from './GestureHandler';
+export { VectorPreview } from './VectorPreview'; 

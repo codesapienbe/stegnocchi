@@ -17,14 +17,20 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 
 import { RootStackParamList } from '@/navigation/Navigation';
+import { useNavigation as useNav } from '@react-navigation/native';
 
 type SettingsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Settings'>;
 
 export const SettingsScreen: React.FC = () => {
   const navigation = useNavigation<SettingsScreenNavigationProp>();
+  const nav = useNav();
 
   const handleBack = (): void => {
     navigation.goBack();
+  };
+
+  const handleOpenSearch = (): void => {
+    (nav as any).navigate('Search');
   };
 
   return (
@@ -40,6 +46,18 @@ export const SettingsScreen: React.FC = () => {
 
       {/* Content */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Search</Text>
+          <TouchableOpacity style={styles.settingItem} onPress={handleOpenSearch}>
+            <View style={styles.settingInfo}>
+              <Ionicons name="search" size={24} color="#007AFF" />
+              <View style={styles.settingText}>
+                <Text style={styles.settingLabel}>Vector Similarity Search</Text>
+                <Text style={styles.settingValue}>Find images by face, object, or scene</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Security</Text>
           

@@ -14,6 +14,7 @@ import {
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
+import { VectorPreview } from '@/components';
 
 import { RootStackParamList } from '@/navigation/Navigation';
 
@@ -47,6 +48,17 @@ export const ResultScreen: React.FC = () => {
           <View style={styles.dataContainer}>
             <Text style={styles.dataLabel}>Additional Data:</Text>
             <Text style={styles.dataText}>{JSON.stringify(data, null, 2)}</Text>
+          </View>
+        )}
+
+        {data && (Array.isArray((data as any).faces) || Array.isArray((data as any).objects) || (data as any).scene) && (
+          <View style={[styles.dataContainer, { marginTop: 16 }]}> 
+            <Text style={styles.dataLabel}>Vector Metadata</Text>
+            <VectorPreview
+              faces={(data as any).faces}
+              objects={(data as any).objects}
+              scene={(data as any).scene}
+            />
           </View>
         )}
       </View>

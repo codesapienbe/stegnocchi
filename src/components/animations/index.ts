@@ -16,4 +16,5 @@ export {
   SkeletonButton, 
   SkeletonAvatar 
 } from './SkeletonLoader';
-export { ModeSwitchAnimation } from './ModeSwitchAnimation'; 
+export { ModeSwitchAnimation } from './ModeSwitchAnimation';
+export { AIAnalysisProgress } from './AIAnalysisProgress'; 
