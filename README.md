@@ -473,3 +473,4 @@ For support and questions:
 - Vector API Reference: docs/VECTOR_API_REFERENCE.md
 - Emulator Testing Guide: docs/EMULATOR_TESTING.md
 - Device Compatibility Matrix: docs/DEVICE_COMPAT_MATRIX.md
+- Cross-Browser Testing Guide: docs/CROSS_BROWSER_TESTING.md
