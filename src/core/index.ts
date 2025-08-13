@@ -57,6 +57,7 @@ export * from './performanceBottleneck';
 export * from './userExperienceMonitoring';
 export * from './incidentResponse';
 export * from './healthChecks';
+export * from './capacityPlanning';
 
 // Production-ready features
 export * from './rateLimiter';
