@@ -51,6 +51,11 @@ export * from './hsm';
 export * from './certPinning';
 export * from './mfa';
 export * from './secureEnclave';
+export * from './infrastructureMonitoring';
+export * from './syntheticMonitoring';
+export * from './performanceBottleneck';
+export * from './userExperienceMonitoring';
+export * from './incidentResponse';
 
 // Production-ready features
 export * from './rateLimiter';
