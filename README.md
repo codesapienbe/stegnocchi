@@ -468,3 +468,5 @@ For support and questions:
 - AI Model Integration: docs/AI_MODEL_INTEGRATION.md
 - Vector Metadata Usage Examples: docs/VECTOR_USAGE_EXAMPLES.md
 - Migration Guide (Text → Vector): docs/VECTOR_MIGRATION_GUIDE.md
+- Performance Considerations (Vector Sizes): docs/PERFORMANCE_CONSIDERATIONS.md
+- Troubleshooting Vector Data: docs/VECTOR_TROUBLESHOOTING.md
