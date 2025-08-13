@@ -476,3 +476,4 @@ For support and questions:
 - QA: React Native Encode/Decode Workflows: docs/QA_MOBILE_WORKFLOWS.md
 - Device Compatibility Matrix: docs/DEVICE_COMPAT_MATRIX.md
 - Cross-Browser Testing Guide: docs/CROSS_BROWSER_TESTING.md
+- Load Testing Guide: docs/LOAD_TESTING.md
