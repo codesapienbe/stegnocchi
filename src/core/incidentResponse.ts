@@ -8,7 +8,7 @@ export interface IncidentEvent {
 	severity: IncidentSeverity;
 	component?: string;
 	message: string;
-	metadata?: Record<string, any>;
+	metadata?: Record<string, any> | undefined;
 	source: 'log' | 'custom';
 }
 
@@ -18,7 +18,7 @@ export interface IncidentRule {
 	severity: IncidentSeverity;
 	cooldownMs?: number; // throttle repeated firings
 	maxPerMinute?: number; // rate-limit
-	actions?: Array<(incident: IncidentEvent) => void | Promise<void)>;
+	actions?: ((incident: IncidentEvent) => void | Promise<void>)[];
 }
 
 type IncidentSink = (incident: IncidentEvent) => void | Promise<void>;
@@ -29,7 +29,7 @@ const sinks: IncidentSink[] = [];
 const lastFiredAt: Map<string, number> = new Map();
 const perMinuteCounts: Map<string, { count: number; windowStart: number }> = new Map();
 
-function newIncident(partial: Omit<IncidentEvent, 'id' | 'timestamp'>): IncidentEvent {
+function newIncident(partial: Omit<IncidentEvent, 'id' | 'timestamp'> & { metadata?: Record<string, any> }): IncidentEvent {
 	return { id: `inc_${Date.now()}_${Math.random().toString(36).slice(2,8)}`, timestamp: new Date().toISOString(), ...partial };
 }
 
@@ -96,7 +96,11 @@ export function registerIncidentSink(sink: IncidentSink): void { sinks.push(sink
 export function unregisterIncidentSink(sink: IncidentSink): void { const i = sinks.indexOf(sink); if (i >= 0) sinks.splice(i, 1); }
 
 export function ingestCustomIncident(severity: IncidentSeverity, message: string, metadata?: Record<string, any>): void {
-	const incident = newIncident({ severity, message, metadata, source: 'custom' });
+	const partial = (metadata
+		? { severity, message, source: 'custom' as const, metadata }
+		: { severity, message, source: 'custom' as const }
+	);
+	const incident = newIncident(partial);
 	emitIncident(incident).catch(() => {});
 }
 
