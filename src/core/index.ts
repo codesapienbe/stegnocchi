@@ -42,6 +42,7 @@ export * from './ai/scene';
 export * from './ai/loaders/face';
 export * from './ai/loaders/object';
 export * from './ai/loaders/scene';
+export * from './ai/init';
 export * from './tracing';
 export * from './secureConfig';
 export * from './errorHandling';

@@ -15,7 +15,7 @@ import { SteganographyProvider } from '@/hooks/useSteganography';
 import { AnimationProvider } from '@/components/animations/AnimationProvider';
 import { Navigation } from '@/navigation/Navigation';
 import { logAppStartup, logAppShutdown } from '@/core/logger';
-import { registerFaceDetectorLoaders, registerObjectDetectorLoaders, registerSceneEmbedderLoaders } from '@/core';
+import { registerFaceDetectorLoaders, registerObjectDetectorLoaders, registerSceneEmbedderLoaders, initializeAIModels } from '@/core';
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -27,6 +27,8 @@ const App: React.FC = () => {
       registerFaceDetectorLoaders();
       registerObjectDetectorLoaders();
       registerSceneEmbedderLoaders();
+      // Optionally preload models for faster first inference
+      initializeAIModels({ preload: true, warmup: false, timeoutMs: 5000 });
     } catch (e) {
       // Registration just wires loaders; any missing deps will be surfaced when loading
     }
