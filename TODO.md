@@ -239,7 +239,7 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 - [x] Write integration tests for steganography workflow.
 - [x] Write E2E test for image upload → message encode → download.
 - [x] Write E2E test for image upload → payload extraction → message reveal.
-- [ ] Test biometric key management if available on mobile.
+- [x] Test biometric key management if available on mobile.
 - [x] QA all encode and decode workflows on web browser (desktop and mobile emulator).
 - [x] QA all encode and decode workflows on React Native mobile emulator/physical device.
 
@@ -266,7 +266,7 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 - [x] Add visual regression testing for UI components.
 - [x] Implement cross-browser compatibility testing.
 - [x] Add device compatibility testing matrix.
-- [ ] Implement automated security audits and penetration testing.
+- [x] Implement automated security audits and penetration testing.
 - [ ] Add compliance testing for data protection regulations.
 - [ ] Implement chaos engineering and failure testing.
 - [ ] Add API contract testing and validation.

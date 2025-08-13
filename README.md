@@ -477,3 +477,5 @@ For support and questions:
 - Device Compatibility Matrix: docs/DEVICE_COMPAT_MATRIX.md
 - Cross-Browser Testing Guide: docs/CROSS_BROWSER_TESTING.md
 - Load Testing Guide: docs/LOAD_TESTING.md
+- Security Audits & Pen Testing Guide: docs/SECURITY_AUDITS.md
+- Biometric Key Management Testing: docs/BIOMETRIC_KEY_TESTING.md
