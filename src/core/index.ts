@@ -58,6 +58,7 @@ export * from './userExperienceMonitoring';
 export * from './incidentResponse';
 export * from './healthChecks';
 export * from './capacityPlanning';
+export * from './slaMonitoring';
 
 // Production-ready features
 export * from './rateLimiter';
