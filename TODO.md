@@ -240,8 +240,8 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 - [x] Write E2E test for image upload → message encode → download.
 - [x] Write E2E test for image upload → payload extraction → message reveal.
 - [ ] Test biometric key management if available on mobile.
-- [ ] QA all encode and decode workflows on web browser (desktop and mobile emulator).
-- [ ] QA all encode and decode workflows on React Native mobile emulator/physical device.
+- [x] QA all encode and decode workflows on web browser (desktop and mobile emulator).
+- [x] QA all encode and decode workflows on React Native mobile emulator/physical device.
 
 ### Vector Testing Features
 

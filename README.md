@@ -472,5 +472,7 @@ For support and questions:
 - Troubleshooting Vector Data: docs/VECTOR_TROUBLESHOOTING.md
 - Vector API Reference: docs/VECTOR_API_REFERENCE.md
 - Emulator Testing Guide: docs/EMULATOR_TESTING.md
+- QA: Web Encode/Decode Workflows: docs/QA_WEB_WORKFLOWS.md
+- QA: React Native Encode/Decode Workflows: docs/QA_MOBILE_WORKFLOWS.md
 - Device Compatibility Matrix: docs/DEVICE_COMPAT_MATRIX.md
 - Cross-Browser Testing Guide: docs/CROSS_BROWSER_TESTING.md
