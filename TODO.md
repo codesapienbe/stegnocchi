@@ -158,7 +158,7 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 - [x] Create vector search interface for similarity matching
 - [x] Implement face thumbnail gallery for extracted face embeddings
 - [x] Add object detection results visualization with bounding boxes
-- [ ] Create scene embedding similarity comparison interface
+- [x] Create scene embedding similarity comparison interface
 - [x] Add vector metadata export functionality (JSON download)
 - [x] Implement vector data import from external sources
 
@@ -325,8 +325,8 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 
 ### Vector Documentation Features
 
-- [ ] Document vector metadata schema and field definitions
-- [ ] Create developer guide for .jpgv format specification
+- [x] Document vector metadata schema and field definitions
+- [x] Create developer guide for .jpgv format specification
 - [ ] Document AI model integration and configuration options
 - [ ] Add usage examples for vector metadata extraction and search
 - [ ] Create migration guide from simple text to vector metadata

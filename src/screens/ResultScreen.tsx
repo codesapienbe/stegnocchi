@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { VectorPreview } from '@/components';
 import { FaceThumbnailGallery } from '@/components';
 import { ObjectDetectionsList } from '@/components';
+import { SceneSimilarityComparison } from '@/components';
 
 import { RootStackParamList } from '@/navigation/Navigation';
 
@@ -71,6 +72,12 @@ export const ResultScreen: React.FC = () => {
               <View style={{ marginTop: 12 }}>
                 <Text style={[styles.dataLabel, { marginBottom: 8 }]}>Objects</Text>
                 <ObjectDetectionsList objects={(data as any).objects} />
+              </View>
+            )}
+            {(data as any).scene && (
+              <View style={{ marginTop: 12 }}>
+                <Text style={[styles.dataLabel, { marginBottom: 8 }]}>Scene</Text>
+                <SceneSimilarityComparison scene={(data as any).scene} />
               </View>
             )}
           </View>

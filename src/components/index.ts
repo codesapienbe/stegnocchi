@@ -19,4 +19,5 @@ export * from './DragDropZone';
 export * from './GestureHandler';
 export { VectorPreview } from './VectorPreview';
 export { FaceThumbnailGallery } from './FaceThumbnailGallery';
-export { ObjectDetectionsList } from './ObjectDetectionsList'; 
+export { ObjectDetectionsList } from './ObjectDetectionsList';
+export { SceneSimilarityComparison } from './SceneSimilarityComparison'; 

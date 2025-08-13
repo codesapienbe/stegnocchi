@@ -460,3 +460,8 @@ For support and questions:
 ---
 
 **Note**: This is a development version. Production use requires additional security audits and testing.
+
+## 📚 Additional Documentation
+
+- Vector Metadata Schema: docs/VECTOR_METADATA_SCHEMA.md
+- .jpgv Format Developer Guide: docs/JPGV_FORMAT_GUIDE.md
