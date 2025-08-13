@@ -466,3 +466,4 @@ For support and questions:
 - Vector Metadata Schema: docs/VECTOR_METADATA_SCHEMA.md
 - .jpgv Format Developer Guide: docs/JPGV_FORMAT_GUIDE.md
 - AI Model Integration: docs/AI_MODEL_INTEGRATION.md
+- Vector Metadata Usage Examples: docs/VECTOR_USAGE_EXAMPLES.md
