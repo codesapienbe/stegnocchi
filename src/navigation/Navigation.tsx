@@ -9,6 +9,7 @@ import { MainScreen } from '@/screens/MainScreen';
 import { ResultScreen } from '@/screens/ResultScreen';
 import { SettingsScreen } from '@/screens/SettingsScreen';
 import { SearchScreen } from '@/screens/SearchScreen';
+import { BatchScreen } from '@/screens/BatchScreen';
 
 // Navigation types
 export type RootStackParamList = {
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   };
   Settings: undefined;
   Search: undefined;
+  Batch: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -74,6 +76,13 @@ export const Navigation: React.FC = () => {
         component={SearchScreen}
         options={{
           title: 'Search',
+        }}
+      />
+      <Stack.Screen 
+        name="Batch" 
+        component={BatchScreen}
+        options={{
+          title: 'Batch',
         }}
       />
     </Stack.Navigator>

@@ -92,6 +92,7 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 - [x] Add support for multi-factor authentication for sensitive operations.
 - [x] Implement secure audit logging for compliance requirements.
 - [x] Add support for custom EXIF field mapping.
+- [x] Add support for bulk operations and batch processing.
 
 ## AI/ML Integration
 
@@ -180,7 +181,7 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 - [x] Implement onboarding flow with interactive tutorials.
 - [x] Add support for user feedback and rating system.
 - [x] Implement advanced search and filtering capabilities.
-- [ ] Add support for bulk operations and batch processing.
+- [x] Add support for bulk operations and batch processing.
 - [x] Implement real-time collaboration features.
 - [x] Add support for custom workflows and automation.
 

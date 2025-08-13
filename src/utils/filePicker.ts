@@ -33,6 +33,17 @@ export interface DualUploadResult {
   mimeType?: string;
 }
 
+export interface MultiFilePickerResult {
+  files: File[];
+  assets: Array<{
+    uri: string;
+    fileName: string;
+    fileSize: number;
+    mimeType: string;
+  }>;
+  cancelled: boolean;
+}
+
 /**
  * Pick files from device gallery or camera
  */
@@ -233,4 +244,59 @@ export async function detectAndLoadContainerFromUri(uri: string, fileName?: stri
     return { container, jpegBytes: bytes, fileName, mimeType: 'image/jpeg' };
   }
   return { container: 'unknown', fileName };
+} 
+
+export async function pickMultipleFiles(options: FilePickerOptions = {}): Promise<MultiFilePickerResult> {
+  const {
+    mediaTypes = 'images',
+    allowsEditing = false,
+    aspect = [1, 1],
+    quality = 1,
+    maxFiles = 10,
+  } = options;
+
+  try {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (permissionResult.status !== 'granted') {
+      return { files: [], assets: [], cancelled: true };
+    }
+
+    const pickerOptions: ImagePicker.ImagePickerOptions = {
+      mediaTypes: mediaTypes === 'images'
+        ? ImagePicker.MediaTypeOptions.Images
+        : mediaTypes === 'videos'
+        ? ImagePicker.MediaTypeOptions.Videos
+        : ImagePicker.MediaTypeOptions.All,
+      allowsEditing,
+      aspect,
+      quality,
+      allowsMultipleSelection: true,
+      selectionLimit: maxFiles as any,
+    } as any;
+
+    const result = await ImagePicker.launchImageLibraryAsync(pickerOptions);
+    if (result.canceled || !result.assets || result.assets.length === 0) {
+      return { files: [], assets: [], cancelled: true };
+    }
+
+    const assets = result.assets.slice(0, maxFiles);
+    const files: File[] = [];
+    const meta: MultiFilePickerResult['assets'] = [];
+
+    for (const asset of assets) {
+      const f = await createFileFromAsset(asset);
+      files.push(f);
+      meta.push({
+        uri: asset.uri,
+        fileName: asset.fileName || 'image.jpg',
+        fileSize: asset.fileSize || 0,
+        mimeType: asset.type || 'image/jpeg',
+      });
+    }
+
+    return { files, assets: meta, cancelled: false };
+  } catch (error) {
+    console.error('Multi-file picker error:', error);
+    return { files: [], assets: [], cancelled: true };
+  }
 } 

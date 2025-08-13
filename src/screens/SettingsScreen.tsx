@@ -33,6 +33,10 @@ export const SettingsScreen: React.FC = () => {
     (nav as any).navigate('Search');
   };
 
+  const handleOpenBatch = (): void => {
+    (nav as any).navigate('Batch');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -54,6 +58,19 @@ export const SettingsScreen: React.FC = () => {
               <View style={styles.settingText}>
                 <Text style={styles.settingLabel}>Vector Similarity Search</Text>
                 <Text style={styles.settingValue}>Find images by face, object, or scene</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Bulk Operations</Text>
+          <TouchableOpacity style={styles.settingItem} onPress={handleOpenBatch}>
+            <View style={styles.settingInfo}>
+              <Ionicons name="albums" size={24} color="#007AFF" />
+              <View style={styles.settingText}>
+                <Text style={styles.settingLabel}>Process Multiple Images</Text>
+                <Text style={styles.settingValue}>Run batch operations with progress</Text>
               </View>
             </View>
           </TouchableOpacity>
