@@ -61,6 +61,7 @@ export * from './capacityPlanning';
 export * from './slaMonitoring';
 export * from './costOptimization';
 export * from './predictiveAnalytics';
+export * from './integrityVerification';
 
 // Production-ready features
 export * from './rateLimiter';

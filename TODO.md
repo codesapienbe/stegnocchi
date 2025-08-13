@@ -369,7 +369,7 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 - [x] Add support for zero-knowledge architecture.
 - [x] Implement secure key management and rotation.
 - [x] Add support for hardware security modules (HSM).
-- [ ] Implement secure code signing and integrity verification.
+- [x] Implement secure code signing and integrity verification.
 - [x] Add support for certificate transparency and validation.
 - [x] Implement secure random number generation validation.
 - [x] Add support for secure enclave and trusted execution environments.
