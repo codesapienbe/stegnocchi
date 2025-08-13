@@ -467,3 +467,4 @@ For support and questions:
 - .jpgv Format Developer Guide: docs/JPGV_FORMAT_GUIDE.md
 - AI Model Integration: docs/AI_MODEL_INTEGRATION.md
 - Vector Metadata Usage Examples: docs/VECTOR_USAGE_EXAMPLES.md
+- Migration Guide (Text → Vector): docs/VECTOR_MIGRATION_GUIDE.md
