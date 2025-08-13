@@ -470,3 +470,4 @@ For support and questions:
 - Migration Guide (Text → Vector): docs/VECTOR_MIGRATION_GUIDE.md
 - Performance Considerations (Vector Sizes): docs/PERFORMANCE_CONSIDERATIONS.md
 - Troubleshooting Vector Data: docs/VECTOR_TROUBLESHOOTING.md
+- Vector API Reference: docs/VECTOR_API_REFERENCE.md
