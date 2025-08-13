@@ -71,7 +71,12 @@
     "react-native-gesture-handler": "~2.14.0",
     "react-native-reanimated": "~3.6.2",
     "react-native-safe-area-context": "4.8.2",
-    "react-native-screens": "~3.29.0"
+    "react-native-screens": "~3.29.0",
+    "@tensorflow/tfjs": "4.22.0",
+    "@tensorflow-models/blazeface": "0.1.0",
+    "@tensorflow-models/coco-ssd": "2.2.3",
+    "@mediapipe/face_detection": "0.4.1646425229",
+    "onnxruntime-web": "1.22.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

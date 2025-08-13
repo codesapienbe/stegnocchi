@@ -15,11 +15,21 @@ import { SteganographyProvider } from '@/hooks/useSteganography';
 import { AnimationProvider } from '@/components/animations/AnimationProvider';
 import { Navigation } from '@/navigation/Navigation';
 import { logAppStartup, logAppShutdown } from '@/core/logger';
+import { registerFaceDetectorLoaders, registerObjectDetectorLoaders, registerSceneEmbedderLoaders } from '@/core';
 
 const App: React.FC = () => {
   useEffect(() => {
     // Log application startup
     logAppStartup('1.0.0', __DEV__ ? 'development' : 'production');
+
+    // Register AI model loaders (face/object/scene)
+    try {
+      registerFaceDetectorLoaders();
+      registerObjectDetectorLoaders();
+      registerSceneEmbedderLoaders();
+    } catch (e) {
+      // Registration just wires loaders; any missing deps will be surfaced when loading
+    }
 
     // Cleanup on unmount
     return () => {
