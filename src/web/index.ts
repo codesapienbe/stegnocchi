@@ -7,7 +7,10 @@
 import { pickFiles as pickFilesWeb, takePhoto as takePhotoWeb } from '@/web/utils/filePicker';
 import { shareFile as shareFileWeb } from '@/web/utils/fileSharing';
 import { downloadFile as downloadFileWeb } from '@/web/utils/fileDownload';
+import { deriveKeyKdf as deriveKeyKdfWeb, benchmarkKdf as benchmarkKdfWeb } from '@/web/utils/kdf';
+import { overwriteAndDeleteFile as overwriteAndDeleteFileWeb, purgeMemoryBuffer as purgeMemoryBufferWeb, getSecureDeletionCapabilities as getSecureDeletionCapabilitiesWeb } from '@/web/utils/secureDeletion';
 export { pickFilesWeb, takePhotoWeb, shareFileWeb, downloadFileWeb };
+export { deriveKeyKdfWeb, benchmarkKdfWeb, overwriteAndDeleteFileWeb, purgeMemoryBufferWeb, getSecureDeletionCapabilitiesWeb };
 
 // Web-specific animations (bundle shared animation components)
 import * as Animations from '@/components/animations';
@@ -51,4 +54,5 @@ export function useWebSharing() {
 // Web-specific types
 export type { FilePickerOptions as WebFilePickerOptions, FilePickerResult as WebFilePickerResult } from '@/web/utils/filePicker';
 export type { DownloadOptions as WebDownloadOptions } from '@/web/utils/fileDownload';
-export type WebAnimationConfig = Record<string, unknown>; 
+export type WebAnimationConfig = Record<string, unknown>;
+export type { KdfParams as WebKdfParams, KdfAlgorithm as WebKdfAlgorithm } from '@/web/utils/kdf'; 

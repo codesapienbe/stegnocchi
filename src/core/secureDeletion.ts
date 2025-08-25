@@ -4,7 +4,7 @@ import { logInfo, logWarn, logError, Component } from './logger';
 
 function toBase64(bytes: Uint8Array): string {
   let binary = '';
-  for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+  for (let i = 0; i < (bytes.byteLength ?? bytes.length); i++) binary += String.fromCharCode(bytes[i]);
   // @ts-ignore atob/btoa available on supported targets
   return btoa(binary);
 }
@@ -35,9 +35,8 @@ export async function overwriteAndDeleteFile(fileUri: string, passes: number = 2
       await FileSystem.deleteAsync(fileUri, { idempotent: true });
       return true;
     }
-
     const info = await FileSystem.getInfoAsync(fileUri);
-    if (!info.exists || !info.size) {
+    if (!info.exists || (info.size ?? 0) === 0) {
       await FileSystem.deleteAsync(fileUri, { idempotent: true });
       logInfo(Component.FILE_SYSTEM, 'File not found; ensured deletion', { fileUri });
       return true;

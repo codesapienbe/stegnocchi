@@ -293,14 +293,14 @@ Here's a fully **distributed, granular checklist** for the advanced EXIF Stegano
 ### Modular Architecture Refactor
 - [ ] Adopt modular code layout with top-level domains: `core`, `web`, `mobile`, `api`, `cli`.
 - [ ] Define ownership and boundaries for each module; document public interfaces.
-- [ ] Introduce path aliases in `tsconfig.json` (`@core/*`, `@web/*`, `@mobile/*`, `@api/*`, `@cli/*`) while preserving current imports.
-- [ ] Create explicit entry points: `src/core/index.ts`, `src/web/index.ts`, `src/native/index.ts` (alias to `@mobile`), `src/api/index.ts`, `src/cli/index.ts`.
-- [ ] Migrate existing platform-specific files (`*.web.ts`, `*.native.ts`) into module folders without breaking behavior.
-- [ ] Isolate cross-cutting concerns in `core` (crypto, exif, validation, logging, config); keep UI and platform code in module layers.
-- [ ] Update bundler configs (Metro, Webpack/Vite) to respect aliases and tree-shaking.
-- [ ] Update `jest.config.js` to multi-project setup with per-module coverage thresholds.
-- [ ] Add import-boundary lint rules to prevent leaking private modules.
-- [ ] Provide migration guide and changelog updates.
+- [x] Introduce path aliases in `tsconfig.json` (`@core/*`, `@web/*`, `@mobile/*`, `@api/*`, `@cli/*`) while preserving current imports.
+- [x] Create explicit entry points: `src/core/index.ts`, `src/web/index.ts`, `src/native/index.ts` (alias to `@mobile`), `src/api/index.ts`, `src/cli/index.ts`.
+- [x] Migrate existing platform-specific files (`*.web.ts`, `*.native.ts`) into module folders without breaking behavior.
+- [x] Isolate cross-cutting concerns in `core` (crypto, exif, validation, logging, config); keep UI and platform code in module layers.
+- [x] Update bundler configs (Metro, Webpack/Vite) to respect aliases and tree-shaking.
+- [x] Update `jest.config.js` to multi-project setup with per-module coverage thresholds.
+- [x] Add import-boundary lint rules to prevent leaking private modules.
+- [x] Provide migration guide and changelog updates.
 - [ ] Verify CI builds and E2E tests pass for all targets.
 
 ### Production-Ready DevOps Features

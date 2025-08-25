@@ -8,6 +8,7 @@ A cross-platform React Native application for hiding encrypted messages in image
 - **PBKDF2 Key Derivation**: Secure password-based key generation (100,000 iterations)
 - **EXIF Field Manipulation**: Hide data in UserComment, ImageDescription, Artist, and Copyright fields
 - **Cross-Platform**: Works on iOS, Android, and Web
+- **Modular Architecture**: Clean separation of concerns with platform-specific optimizations
 - **Custom Logo**: Beautiful gnocchi-themed branding with SVG graphics
 - **Real-time Validation**: File format, password strength, and message validation
 - **Structured Logging**: JSON-formatted logs for monitoring and debugging
@@ -28,6 +29,39 @@ A cross-platform React Native application for hiding encrypted messages in image
 - **Expo Crypto** - Cryptographic operations
 - **Expo Image Picker** - Image selection
 - **React Native Gesture Handler** - Touch gestures
+
+## 🏗️ Architecture
+
+Stegnocchi follows a modular architecture with clear separation of concerns:
+
+```
+src/
+├── core/          # Platform-agnostic business logic
+├── web/           # Web-specific implementations
+├── native/        # React Native-specific implementations
+├── api/           # Server/API functionality (future)
+├── cli/           # Command-line interface (future)
+├── platform/      # Cross-platform abstraction layer
+├── components/    # Shared UI components
+├── screens/       # Application screens
+└── utils/         # Shared utilities
+```
+
+### Key Benefits
+
+- **Platform Isolation**: Web and native code never mix
+- **Core Purity**: Business logic remains platform-agnostic
+- **Easy Testing**: Each module can be tested independently
+- **Bundle Optimization**: Platform-specific code is tree-shaken
+- **Developer Experience**: Clear import boundaries prevent architectural violations
+
+### Module Responsibilities
+
+- **`@/core`**: Crypto, EXIF processing, validation, logging
+- **`@/web`**: Browser APIs, DOM manipulation, web-specific file handling
+- **`@/native`**: React Native APIs, device features, native file handling
+- **`@/platform`**: Unified API that routes to appropriate platform implementation
+- **`@/components`**: Reusable UI components that work across platforms
 
 ## 📦 Installation
 
@@ -385,6 +419,68 @@ npm run test:watch
 
 # Generate coverage report
 npm run test:coverage
+```
+
+## 🔄 Migration Guide
+
+If you're upgrading from v1.x to v2.x, please see our comprehensive [Migration Guide](MIGRATION_GUIDE.md) which covers:
+
+- Import path changes and new module aliases
+- Platform abstraction layer usage
+- Configuration migration to centralized system
+- Breaking changes and how to fix them
+- Step-by-step migration process
+- Common issues and solutions
+
+### Quick Migration Checklist
+
+- [ ] Update imports: `'../core/crypto'` → `'@/core/crypto'`
+- [ ] Use platform abstraction: `'@/utils/filePicker'` → `PlatformAPI.useFilePicker()`
+- [ ] Update configuration: hardcoded values → `getCoreConfig()`
+- [ ] Run boundary checks: `npm run lint:boundaries`
+- [ ] Update tests with new module structure
+
+## 🛠️ Development
+
+### Module Boundaries
+
+The project enforces strict module boundaries through ESLint rules:
+
+```bash
+# Check for architectural violations
+npm run lint:boundaries
+
+# Check for unused exports
+npm run lint:modules
+
+# Standard linting
+npm run lint
+```
+
+### Adding New Features
+
+1. **Determine the right module**: Is it core logic, platform-specific, or UI?
+2. **Use platform abstraction**: Never import platform modules directly in shared code
+3. **Follow import order**: React → External → Core → Platform → Relative
+4. **Add tests**: Each module should have comprehensive test coverage
+5. **Update documentation**: Keep module APIs documented
+
+### Configuration
+
+Use the centralized configuration system:
+
+```typescript
+import { getCoreConfig, updateCoreConfig } from '@/core/config';
+
+// Get current configuration
+const config = getCoreConfig();
+const maxFileSize = config.images.maxFileSize;
+
+// Update configuration
+updateCoreConfig({
+  crypto: { defaultKdfIterations: 200000 },
+  images: { maxFileSize: 100 * 1024 * 1024 }
+});
 ```
 
 ## 📝 Available Scripts

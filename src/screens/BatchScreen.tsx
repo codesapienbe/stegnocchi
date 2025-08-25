@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/navigation/Navigation';
-import { pickMultipleFiles } from '@/utils/filePicker';
+import { PlatformAPI } from '@/platform';
+import { pickMultipleFiles as pickMultipleFilesWeb } from '@/web/utils/filePicker';
 import { BatchProcessor, BatchJob } from '@/utils/batchProcessor';
 
 type BatchScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Batch'>;
@@ -21,8 +22,15 @@ export const BatchScreen: React.FC = () => {
   const handlePickAndProcess = async (): Promise<void> => {
     if (isRunning) return;
     setSummary(null);
-
-    const result = await pickMultipleFiles({ mediaTypes: 'images', maxFiles: 10 });
+    let result: { cancelled: boolean; files: File[] };
+    if (Platform.OS === 'web') {
+      const webRes = await pickMultipleFilesWeb({ mediaTypes: 'images', maxFiles: 10 });
+      result = { cancelled: webRes.cancelled, files: webRes.files };
+    } else {
+      const pickFiles = PlatformAPI.useFilePicker();
+      const first = await pickFiles({ mediaTypes: 'images', allowsMultipleSelection: true, maxFiles: 10 });
+      result = { cancelled: first.cancelled, files: first.file ? [first.file] as unknown as File[] : [] };
+    }
     if (result.cancelled || result.files.length === 0) return;
 
     setIsRunning(true);

@@ -1,4 +1,4 @@
-import { logInfo, logError, Component } from '../core/logger';
+import { logInfo, logError, Component } from '@/core/logger';
 
 export interface DownloadOptions {
   filename?: string;

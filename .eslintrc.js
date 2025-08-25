@@ -24,6 +24,7 @@ module.exports = {
     'react-native',
     'react-hooks',
     'prettier',
+    'import',
   ],
   env: {
     browser: true,
@@ -138,6 +139,146 @@ module.exports = {
 
     // Prettier integration
     'prettier/prettier': 'error',
+
+    // ===== IMPORT BOUNDARY RULES =====
+    // Enforce modular architecture boundaries
+    'import/no-restricted-paths': ['error', {
+      zones: [
+        // Core module restrictions
+        {
+          target: './src/core/**/*',
+          from: ['./src/web/**/*', './src/native/**/*', './src/platform/**/*', './src/api/**/*', './src/cli/**/*'],
+          message: 'Core module cannot import from platform-specific modules. Use dependency injection or interfaces instead.',
+        },
+        
+        // Web module restrictions
+        {
+          target: './src/web/**/*',
+          from: ['./src/native/**/*', './src/api/**/*', './src/cli/**/*'],
+          message: 'Web module cannot import from native, api, or cli modules.',
+        },
+        
+        // Native module restrictions
+        {
+          target: './src/native/**/*',
+          from: ['./src/web/**/*', './src/api/**/*', './src/cli/**/*'],
+          message: 'Native module cannot import from web, api, or cli modules.',
+        },
+        
+        // API module restrictions
+        {
+          target: './src/api/**/*',
+          from: ['./src/web/**/*', './src/native/**/*', './src/cli/**/*'],
+          message: 'API module cannot import from web, native, or cli modules.',
+        },
+        
+        // CLI module restrictions
+        {
+          target: './src/cli/**/*',
+          from: ['./src/web/**/*', './src/native/**/*', './src/api/**/*'],
+          message: 'CLI module cannot import from web, native, or api modules.',
+        },
+        
+        // UI components cannot import from platform modules directly
+        {
+          target: './src/components/**/*',
+          from: ['./src/web/**/*', './src/native/**/*'],
+          message: 'UI components should use platform abstraction layer (@/platform) instead of direct platform imports.',
+        },
+        
+        // Screens cannot import from platform modules directly
+        {
+          target: './src/screens/**/*',
+          from: ['./src/web/**/*', './src/native/**/*'],
+          message: 'Screens should use platform abstraction layer (@/platform) instead of direct platform imports.',
+        },
+        
+        // Utils cannot import from platform modules directly
+        {
+          target: './src/utils/**/*',
+          from: ['./src/web/**/*', './src/native/**/*', './src/api/**/*', './src/cli/**/*'],
+          message: 'Utils should be platform-agnostic. Use @/core or @/platform instead.',
+        },
+      ]
+    }],
+    
+    // Enforce import order and grouping
+    'import/order': ['error', {
+      groups: [
+        'builtin',
+        'external',
+        'internal',
+        'parent',
+        'sibling',
+        'index',
+      ],
+      pathGroups: [
+        {
+          pattern: 'react',
+          group: 'external',
+          position: 'before',
+        },
+        {
+          pattern: 'react-native',
+          group: 'external',
+          position: 'before',
+        },
+        {
+          pattern: '@expo/**',
+          group: 'external',
+          position: 'before',
+        },
+        {
+          pattern: '@/core/**',
+          group: 'internal',
+          position: 'before',
+        },
+        {
+          pattern: '@/platform/**',
+          group: 'internal',
+          position: 'before',
+        },
+        {
+          pattern: '@/(web|native|api|cli)/**',
+          group: 'internal',
+          position: 'after',
+        },
+      ],
+      pathGroupsExcludedImportTypes: ['react', 'react-native'],
+      'newlines-between': 'always',
+      alphabetize: {
+        order: 'asc',
+        caseInsensitive: true,
+      },
+    }],
+    
+    // Prevent circular dependencies
+    'import/no-cycle': ['error', { maxDepth: '∞' }],
+    
+    // Ensure imports exist
+    'import/no-unresolved': ['error', {
+      ignore: ['^@/.*$'], // Allow path aliases to be resolved by TypeScript
+    }],
+    
+    // Prevent unused imports
+    'import/no-unused-modules': ['error', {
+      unusedExports: true,
+      src: ['src/**/*.{ts,tsx}'],
+      ignoreExports: ['src/**/index.ts', 'src/**/*.test.{ts,tsx}'],
+    }],
+    
+    // Enforce consistent import style
+    'import/no-default-export': 'off', // Allow default exports for React components
+    'import/prefer-default-export': 'off',
+    'import/no-anonymous-default-export': ['error', {
+      allowArray: false,
+      allowArrowFunction: false,
+      allowAnonymousClass: false,
+      allowAnonymousFunction: false,
+      allowCallExpression: false,
+      allowLiteral: false,
+      allowObject: true, // Allow default export of objects
+    }],
   },
   overrides: [
     {
@@ -193,6 +334,16 @@ module.exports = {
         'react/no-unknown-property': 'off',
         'react/no-unsafe': 'off',
         'react/self-closing-comp': 'off',
+        // Core module should not have external UI dependencies
+        'import/no-restricted-paths': ['error', {
+          zones: [
+            {
+              target: './src/core/**/*',
+              from: ['./src/components/**/*', './src/screens/**/*', './src/navigation/**/*'],
+              message: 'Core module cannot import UI components. Keep core logic platform-agnostic.',
+            },
+          ]
+        }],
       },
     },
     {
@@ -219,6 +370,29 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-var-requires': 'off',
         'no-console': 'off',
+      },
+    },
+    {
+      // Platform abstraction layer - allowed to import from platform modules
+      files: ['src/platform/**/*.{ts,tsx}'],
+      rules: {
+        'import/no-restricted-paths': 'off', // Platform layer needs access to all modules
+      },
+    },
+    {
+      // Module entry points - allowed to re-export from internal modules
+      files: ['src/*/index.{ts,tsx}'],
+      rules: {
+        'import/no-restricted-paths': 'off', // Entry points need to access internal modules
+        'import/no-unused-modules': 'off', // Entry points are designed for re-export
+      },
+    },
+    {
+      // Allow development tooling to access any modules
+      files: ['**/*.config.{js,ts}', 'scripts/**/*.{js,ts}', 'tools/**/*.{js,ts}'],
+      rules: {
+        'import/no-restricted-paths': 'off',
+        'import/no-unused-modules': 'off',
       },
     },
   ],

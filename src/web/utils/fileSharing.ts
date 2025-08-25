@@ -1,2 +1,2 @@
-export { shareFile } from '@/utils/fileSharing.web';
-export type { ShareOptions, DownloadOptions } from '@/utils/fileSharing.web'; 
+export { shareFile } from '@/web/utils/fileSharing.web';
+export type { ShareOptions, DownloadOptions } from '@/web/utils/fileSharing.web'; 

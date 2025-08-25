@@ -1,2 +1,2 @@
-export { downloadFile, downloadProcessedImage, downloadTextFile, downloadJsonFile, downloadJpgv } from '@/utils/fileDownload.web';
-export type { DownloadOptions, DownloadResult } from '@/utils/fileDownload.web'; 
+export { downloadFile, downloadProcessedImage, downloadTextFile, downloadJsonFile, downloadJpgv } from '@/web/utils/fileDownload.web';
+export type { DownloadOptions, DownloadResult } from '@/web/utils/fileDownload.web'; 
