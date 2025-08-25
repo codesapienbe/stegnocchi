@@ -23,10 +23,11 @@ import { logUserInteraction, Component } from '@/core/logger';
 import { MobileLayout, MobileScrollView } from '@/components/layout';
 import { FileUploadAnimation } from '@/components/animations';
 import { AIAnalysisProgress } from '@/components/animations';
-import { pickFiles, useResponsive } from '@/utils';
+import { useResponsive } from '@/utils';
 import { isVoiceSupported, startVoiceListening } from '@/utils';
 import Logo from '@/components/Logo';
 import { VectorPreview } from '@/components';
+import { PlatformAPI } from '@/platform';
 
 type MainScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
 
@@ -38,12 +39,13 @@ export const MainScreen: React.FC = () => {
   const { isMobile, isTablet, isDesktop, SPACING, PADDING, TOUCH_TARGETS } = useResponsive();
   const [voiceSession, setVoiceSession] = useState<null | { stop: () => void }>(null);
   const [isListening, setIsListening] = useState(false);
+  const pickFilesFn = PlatformAPI.useFilePicker();
 
   const pickImage = async (): Promise<void> => {
     try {
       setIsLoading(true);
       
-      const result = await pickFiles({
+      const result = await pickFilesFn({
         mediaTypes: 'images',
         allowsEditing: false,
         quality: 1,

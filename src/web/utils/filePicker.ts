@@ -1,0 +1,2 @@
+export { pickFiles, takePhoto, pickMultipleFiles, getPlatformFilePicker, supportsFileAPI, loadBytesFromUri, detectAndLoadContainerFromUri } from '@/utils/filePicker.web';
+export type { FilePickerOptions, FilePickerResult, MultiFilePickerResult, DualUploadResult } from '@/utils/filePicker.web'; 

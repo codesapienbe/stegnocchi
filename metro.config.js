@@ -96,17 +96,22 @@ config.resolver.alias = {
   '@/web': normalizePath(path.resolve(__dirname, 'src/web')),
   '@/native': normalizePath(path.resolve(__dirname, 'src/native')),
   '@/assets': normalizePath(path.resolve(__dirname, 'assets')),
+  '@/api': normalizePath(path.resolve(__dirname, 'src/api')),
+  '@/cli': normalizePath(path.resolve(__dirname, 'src/cli')),
 };
 
 // Add custom extensions
 config.resolver.extensions = [
   '.ios.ts',
   '.android.ts',
+  '.web.ts',
   '.ts',
   '.ios.tsx',
   '.android.tsx',
+  '.web.tsx',
   '.tsx',
   '.jsx',
+  '.web.js',
   '.js',
   '.json',
 ];
@@ -209,7 +214,7 @@ if (process.platform === 'win32') {
 // Configure server options
 config.server = {
   ...config.server,
-  port: 8081,
+  port: parseInt(process.env.METRO_PORT || process.env.PORT || '3001', 10),
   enhanceMiddleware: (middleware, server) => {
     return (req, res, next) => {
       // Add custom middleware here if needed

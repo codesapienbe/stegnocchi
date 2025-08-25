@@ -14,7 +14,19 @@ module.exports = {
     'node_modules/(?!(react-native|@react-native|@react-navigation|expo|@expo|react-native-.*)/)',
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  moduleNameMapping: {
+  moduleNameMapper: {
+    '^@/core/(.*)$': '<rootDir>/src/core/$1',
+    '^@/components/(.*)$': '<rootDir>/src/components/$1',
+    '^@/hooks/(.*)$': '<rootDir>/src/hooks/$1',
+    '^@/navigation/(.*)$': '<rootDir>/src/navigation/$1',
+    '^@/screens/(.*)$': '<rootDir>/src/screens/$1',
+    '^@/utils/(.*)$': '<rootDir>/src/utils/$1',
+    '^@/types/(.*)$': '<rootDir>/src/types/$1',
+    '^@/platform/(.*)$': '<rootDir>/src/platform/$1',
+    '^@/web/(.*)$': '<rootDir>/src/web/$1',
+    '^@/native/(.*)$': '<rootDir>/src/native/$1',
+    '^@/api/(.*)$': '<rootDir>/src/api/$1',
+    '^@/cli/(.*)$': '<rootDir>/src/cli/$1',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   testMatch: [

@@ -43,7 +43,7 @@ A cross-platform React Native application for hiding encrypted messages in image
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/your-org/stegnocchi.git
+   git clone https://github.com/codesapienbe/stegnocchi.git
    cd stegnocchi
    ```
 

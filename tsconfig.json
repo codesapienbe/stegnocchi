@@ -2,7 +2,10 @@
   "compilerOptions": {
     "strict": true,
     "target": "es2020",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -15,15 +18,48 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@/components/*": ["src/components/*"],
-      "@/core/*": ["src/core/*"],
-      "@/types/*": ["src/types/*"],
-      "@/utils/*": ["src/utils/*"],
-      "@/hooks/*": ["src/hooks/*"],
-      "@/screens/*": ["src/screens/*"],
-      "@/navigation/*": ["src/navigation/*"],
-      "@/assets/*": ["assets/*"]
+      "@/*": [
+        "src/*"
+      ],
+      "@/components/*": [
+        "src/components/*"
+      ],
+      "@/core/*": [
+        "src/core/*"
+      ],
+      "@/types/*": [
+        "src/types/*"
+      ],
+      "@/utils/*": [
+        "src/utils/*"
+      ],
+      "@/hooks/*": [
+        "src/hooks/*"
+      ],
+      "@/screens/*": [
+        "src/screens/*"
+      ],
+      "@/navigation/*": [
+        "src/navigation/*"
+      ],
+      "@/assets/*": [
+        "assets/*"
+      ],
+      "@/web/*": [
+        "src/web/*"
+      ],
+      "@/native/*": [
+        "src/native/*"
+      ],
+      "@/platform/*": [
+        "src/platform/*"
+      ],
+      "@/api/*": [
+        "src/api/*"
+      ],
+      "@/cli/*": [
+        "src/cli/*"
+      ]
     },
     "declaration": true,
     "declarationMap": true,
@@ -55,5 +91,6 @@
     "**/*.test.tsx",
     "**/*.spec.ts",
     "**/*.spec.tsx"
-  ]
-} 
+  ],
+  "extends": "expo/tsconfig.base"
+}

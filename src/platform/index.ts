@@ -21,9 +21,9 @@ if (Platform.OS === 'web') {
 export const PlatformAPI = {
   // File operations
   pickFiles: platformModule.pickFilesWeb || platformModule.pickFilesNative,
-  takePhoto: platformModule.takePhotoNative,
-  shareFile: platformModule.shareFileNative,
-  downloadFile: platformModule.downloadFileWeb,
+  takePhoto: platformModule.takePhotoWeb || platformModule.takePhotoNative,
+  shareFile: platformModule.shareFileWeb || platformModule.shareFileNative,
+  downloadFile: platformModule.downloadFileWeb || platformModule.downloadFileNative,
 
   // Animations
   animations: platformModule.WebAnimations || platformModule.NativeAnimations,
@@ -39,8 +39,8 @@ export const PlatformAPI = {
 
   // Hooks
   useFilePicker: platformModule.useWebFilePicker || platformModule.useNativeFilePicker,
-  useSharing: platformModule.useNativeSharing,
-  useDownload: platformModule.useWebDownload,
+  useSharing: platformModule.useWebSharing || platformModule.useNativeSharing,
+  useDownload: platformModule.useWebDownload || platformModule.useNativeDownload,
   useAnimations: platformModule.useWebAnimations || platformModule.useNativeAnimations,
 };
 
@@ -164,11 +164,5 @@ export const PlatformInit = {
 };
 
 // Export platform-specific types
-export type {
-  WebFilePickerOptions,
-  WebDownloadOptions,
-  WebAnimationConfig,
-  NativeFilePickerOptions,
-  NativeSharingOptions,
-  NativeAnimationConfig,
-} from '../web/types'; 
+export type { WebFilePickerOptions, WebDownloadOptions, WebAnimationConfig } from '@/web';
+export type { NativeFilePickerOptions, NativeSharingOptions, NativeAnimationConfig } from '@/native'; 
